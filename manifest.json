@@ -14,7 +14,7 @@
       {
           "matches": "",
           "css": "",
-          "js": ""
+          "js": ["jquery-3.3.1.min.js", "popup.js"]
       }
   ],
   "permissions": [
