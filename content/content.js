@@ -1,8 +1,5 @@
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        if (request["message"] == "clicked madlibify button") {
-            console.log("madlibify: activate!")
-        }
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request === "madlibify_button_pressed") {
+        console.log("madlibify_button_press_received")
     }
-);
-console.log("eyyyy")
+});
