@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "madlibify",
-  "description": "This extension allows the user to replace words on a webpage with nouns, verbs, adberbs, and adjectives they provide.",
+  "description": "Replace words on any webpage with nouns, adjectives, verbs, and adverbs or your choosing.  How funny can you be?",
   "version": "0.0.1",
   "default_locale": "en",
   "author": "Josh Abravanel, David Huculak, Peter Granitski, Stuart Mashaal",
