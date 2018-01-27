@@ -1,6 +1,6 @@
 $madlibify_button = null;
 document.addEventListener("DOMContentLoaded", () => {
-    $madlibify_button = $("#madlibify_button")
+    $madlibify_button = $("#js-madlibify-btn")
     $madlibify_button.on("click", () => {
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
             console.log("fuck you");
