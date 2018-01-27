@@ -1,32 +1,35 @@
 {
   "manifest_version": 2,
   "name": "madlibify",
-  "description": "Replace words on any webpage with nouns, adjectives, verbs, and adverbs or your choosing.  How funny can you be?",
+  "description": "A new twist on an old game!  Replace words on any webpage with nouns, adjectives, verbs, and adverbs or your choosing.  How funny can you be?",
+
   "version": "0.0.1",
   "default_locale": "en",
   "author": "Josh Abravanel, David Huculak, Peter Granitski, Stuart Mashaal",
 
   "browser_action": {
-    "default_icon": "madlib.png",
-    "default_popup": "popup.html"
+    "default_icon": "img/madlib.png",
+    "default_popup": "popup/popup.html"
   },
+
   "background": {
-    "scripts": ["bootstrapper.js"],
+    "scripts": [
+      "background/background.js"
+    ],
     "persistent": false
   },
   "content_scripts": [
     {
       "matches": [
-        "http://*/*", "https://*/*"
-      ],
-      "css": [
-        "styles.css"
+        "<all_urls>"
       ],
       "js": [
-        "jquery-3.3.1.min.js", "content.js"
+        "libs/jquery-3.3.1.min.js", "content/content.js"
       ]
     }
   ],
+  "options_page": "options.html",
+
   "permissions": [
     "activeTab",
     "storage"
