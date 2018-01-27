@@ -15,10 +15,10 @@
       "persistent": false
   },
   "content_scripts": [
-      {
-          "matches": [
-			"http://*/*"
-		  ],
+    {
+      "matches": [
+        "http://*/*"
+      ],
           "css": [
 			"styles.css"
 		  ],
