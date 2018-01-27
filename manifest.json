@@ -19,8 +19,12 @@
           "matches": [
 			"http://*/*"
 		  ],
-          "css": "",
-          "js": ["jquery-3.3.1.min.js", "content.js"]
+          "css": [
+			"styles.css"
+		  ],
+          "js": [
+			"jquery-3.3.1.min.js", "content.js"
+		  ]
       }
   ],
   "permissions": [
