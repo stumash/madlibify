@@ -12,7 +12,7 @@
   },
   "background": {
       "scripts": ["bootstrapper.js"],
-      "persistent": "false"
+      "persistent": false
   },
   "content_scripts": [
       {
