@@ -37,4 +37,8 @@ do
 done >> "${filename}" < intermediate_file_1
 echo "}" >> "${filename}"
 
-rm intermediate_file_1
+rm intermediate_file_1 # don't need this anymore
+
+len=$(cat "${1}" | wc -l)
+len=$(($len - 1))
+sed "${len}s/,//" -i "${filename}"
