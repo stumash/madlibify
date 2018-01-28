@@ -1,9 +1,10 @@
 let db = null;
+let table = null;
 
 chrome.runtime.onInstalled.addListener(function(details){
     if (details.reason == "install") {
         // word2pos: word to part-of-speech
-        db = new Dexie("word2pos.db");
+        let db = new Dexie("word2pos.db");
         db.version(2).stores({
             word2pos: "word,pos"
         })
@@ -30,15 +31,44 @@ chrome.runtime.onInstalled.addListener(function(details){
             })
         })
     } else if (details.reason == "update") {
-        console.log("doing things to update.... merp")
+        console.log("doing things to update.... merp");
     }
 });
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        console.log(sender.tab ?
-            "from a content script:" + sender.tab.url :
-            "from the extension");
-        if (request.operation == "getDB")
-            sendResponse({db: db});
+        if (request.word){
+            new Dexie('word2pos.db').open().then(function (db) {
+                db.tables.forEach(function (table) {
+                    if(table.name === "word2pos"){
+                        table.get(request.word, function(value){
+                            let pos = undefined;
+                            if(value){
+                                console.log(value);
+                                if(value.pos === "a"){
+                                    pos = "adjective";
+                                }
+                                if(value.pos === "v"){
+                                    pos = "verb";
+                                }
+                                if(value.pos === "n"){
+                                    pos = "noun";
+                                }
+                            }
+                            sendResponse({pos: pos});
+                        });
+                    }
+                });
+            }).catch('NoSuchDatabaseError', function(e) {
+                // Database with that name did not exist
+                console.error ("Database not found");
+                sendResponse({pos: undefined});
+            }).catch(function (e) {
+                console.error ("Oh uh: " + e);
+                sendResponse({pos: undefined});
+            });
+        } else {
+            sendResponse({pos: undefined});
+        }
+        return true;
     });

@@ -49,13 +49,6 @@ $( document ).ready(function() {
     //     }
     // });
     //
-    setTimeout(function() {
-        // getPartOfSpeechByWord("monster");
-        console.log("should ask for reference to db");
-        chrome.runtime.sendMessage({operation: "getDB"}, function(response) {
-            console.log(response);
-        });
-    }, 1000);
 });
 
 function loadWordList() {
@@ -171,23 +164,10 @@ function getNextReplacementWord(type, callback) {
     });
 }
 
-function getPartOfSpeechByWord(word) {
-    db.word2pos.where("word").equals(word).then(function(obj) {
-        switch(obj.pos) {
-            case "a":
-                return "adjective"
-            case "v":
-                return "verb"
-            case "n":
-                return "noun"
-            case "r":
-                return "adverb"
-            default:
-                return undefined
-        }
-    }).catch(function(e) {
-        return undefined
-    })
+function getPartOfSpeechByWord(word, callback) {
+    chrome.runtime.sendMessage({word: word}, function(response) {
+        callback(response.pos);
+    });
 }
 
 // use words.filter(isWord) ?
@@ -247,59 +227,76 @@ var wordCount = 0;
 var words;
 
   function getAllTextNodes(){
-
+      let transformsStarted = 0;
+      let transformsComplete = 0;
     (function scanSubTree(node) {
       if (node.childNodes.length) {
         for (var i = 0; i < node.childNodes.length; i++) {
           scanSubTree(node.childNodes[i]);
 		}
 	  } else if (node.nodeType == Node.TEXT_NODE) {
-		var nodeText = node.nodeValue;
-        newText = "";
-		// process the text
-		var nodeTextArr = nodeText.split(/\b/);
-        //var stepsBetweenArr = nodeText.split(/\w*[\w']*\w{1,}/);
-        var j = 0;		
-        var from = 0;
-        var to = 0;
-        //console.log("stepsbetwenarr", stepsBetweenArr); 
-       nodeTextArr.forEach(function(current, index) {
-            if (isWord(current)) {
-                //console.log("current", current);
-                wordCount++;
-                /*replacement = getWordFromSet(current);
-                to += current.length - 1 + ((stepsBetweenArr[j]) ? stepsBetweenArr[j++].length : 0);
-                console.log("from", from, "to", to);
-			    newText += nodeText.substring(from, to).replace(new RegExp(`${current}`), replacement);
-                console.log("newText", newText);
-                from += to;*/
+          transformsStarted++;
+          console.log("completed " + transformsComplete + "/" + transformsStarted + " transformations");
+            transformSentence(node.nodeValue, function(newText) {
+                node.nodeValue = newText;
+                transformsComplete++;
+                console.log("completed " + transformsComplete + "/" + transformsStarted + " transformations");
 
-                var pos = getPos(current);
 
-                if(pos){
-                	newText += getNextWord(pos);
-				} else {
-                	newText += current;
-				}
-
-                // find replacement word
-                // replacement = getWordFromSet(current);
-
-                // add replacement word to newText
-                // newText += replacement;
-
-                //newText += stepsBetweenArr[index+1];
-
-            } else {
-                // add punctuation/spacing to newText
-                newText += current;
-            }
-		});
-		node.nodeValue = newText;
+            });
 	  }
     })(document.body);
   }
 
   function quote(str){
     return (str+'').replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+  }
+
+  function transformSentence(nodeText, callback) {
+      var newText = "";
+      // process the text
+      var nodeTextArr = nodeText.split(/\b/);
+      //var stepsBetweenArr = nodeText.split(/\w*[\w']*\w{1,}/);
+      var j = 0;
+      var from = 0;
+      var to = 0;
+      var lookupsStarted = 0;
+      var substringsProccessed = 0;
+      //console.log("stepsetwenarr", stepsBetweenArr);
+      var newSentenceWordArray = [];
+      nodeTextArr.forEach(function(current, index) {
+          if (isWord(current)) {
+              wordCount++;
+
+              getPartOfSpeechByWord(current, function(pos) {
+                  if(pos){
+                      getNextReplacementWord(pos, function(replacement){
+                          if(replacement){
+                              newSentenceWordArray[index] = replacement;
+                          } else {
+                              newSentenceWordArray[index] = current;
+                          }
+                          substringsProccessed++;
+                          if(substringsProccessed === nodeTextArr.length){
+                              callback(newSentenceWordArray.join(""));
+                          }
+                      });
+                  } else {
+                      newSentenceWordArray[index] = current;
+                      substringsProccessed++;
+                      if(substringsProccessed === nodeTextArr.length){
+                          callback(newSentenceWordArray.join(""));
+                      }
+                  }
+              });
+
+          } else {
+              // add punctuation/spacing to newText
+              newSentenceWordArray[index] = current;
+              substringsProccessed++;
+              if(substringsProccessed === nodeTextArr.length){
+                  callback(newSentenceWordArray.join(""));
+              }
+          }
+      });
   }
