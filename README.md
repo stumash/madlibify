@@ -15,6 +15,30 @@ The program will go through all text on the page indescriminently and do all pos
 once it reaches the end of the list of a given category (i.e. it runs out of nouns), it reshuffles the list then restarts from the beginning.
 The program will stop once all possible replacements have been made on the page.
 
+## Wordset json spec
+
+```
+{
+    wordSet: {
+        nouns: [
+            "bird",
+            "word",
+            "shirt"
+        ],
+        verbs: [
+            "eat",
+            "sleep",
+            "shower"
+        ],
+        adjectives: [
+            "green",
+            "funny",
+            "destroyed"
+        ]
+    }
+}
+```
+
 ## Features to add after mvp
 
 ## Task List
