@@ -1,15 +1,15 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request === "madlibify_button_pressed") {
-        console.log("madlibify_button_press_received");
 		getAllTextNodes();
-    	console.log("word count: " + wordCount);
+    	//console.log("word count: " + wordCount);
 	}
 });
 
 // use words.filter(isWord) ?
 function isWord(str) {
+    str = str.trim();
 	if (str.length > 0) {
-		return !str.includes((" ")) && str !== "" && str !== "." && str != ",";
+		return !str.match(/['!"#$%&\\'()\*+,\-\.\/:;<=>?@\[\\\]\^_`{|}~']/g);
 	}
 	return false;
 }
@@ -42,21 +42,41 @@ var words;
         for (var i = 0; i < node.childNodes.length; i++) {
           scanSubTree(node.childNodes[i]);
 		}
-	  } else if(node.nodeType == Node.TEXT_NODE) {
+	  } else if (node.nodeType == Node.TEXT_NODE) {
 		var nodeText = node.nodeValue;
+        newText = "";
 		// process the text
-		var nodeTextArr = nodeText.split(/[.,?!]?\s+/);
-		nodeTextArr.forEach(function(current) {
+		var nodeTextArr = nodeText.split(/\b/);
+        //var stepsBetweenArr = nodeText.split(/\w*[\w']*\w{1,}/);
+        var j = 0;		
+        var from = 0;
+        var to = 0;
+        //console.log("stepsbetwenarr", stepsBetweenArr); 
+       nodeTextArr.forEach(function(current, index) {
             if (isWord(current)) {
-                console.log("processing", nodeText);
-                console.log("current", current);
+                //console.log("current", current);
                 wordCount++;
+                /*replacement = getWordFromSet(current);
+                to += current.length - 1 + ((stepsBetweenArr[j]) ? stepsBetweenArr[j++].length : 0);
+                console.log("from", from, "to", to);
+			    newText += nodeText.substring(from, to).replace(new RegExp(`${current}`), replacement);
+                console.log("newText", newText);
+                from += to;*/
+
+                // find replacement word
                 replacement = getWordFromSet(current);
-			    nodeText = nodeText.replace(new RegExp(`${current}`), replacement);
-                console.log("replaced by", replacement);
+
+                // add replacement word to newText
+                newText += replacement;
+
+                //newText += stepsBetweenArr[index+1];
+
+            } else {
+                // add punctuation/spacing to newText
+                newText += current;
             }
 		});
-		node.nodeValue = nodeText;
+		node.nodeValue = newText;
 	  }
     })(document.body);
   }
