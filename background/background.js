@@ -1,7 +1,7 @@
 let db = null;
 
 chrome.runtime.onInstalled.addListener(function(details){
-    if(details.reason == "install" || details.reason == "update"){
+    if (details.reason == "install") {
         // word2pos: word to part-of-speech
         db = new Dexie("word2pos.db");
         db.version(2).stores({
@@ -29,6 +29,8 @@ chrome.runtime.onInstalled.addListener(function(details){
                 console.error("BulkPut failed!")
             })
         })
+    } else if (details.reason == "update") {
+        console.log("doing things to update.... merp")
     }
 });
 
