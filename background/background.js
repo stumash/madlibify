@@ -20,7 +20,6 @@ chrome.runtime.onInstalled.addListener(function(details){
                 console.log("BulkPut success!")
                 $madlibify_button.on("click", () => {
                     chrome.tabs.query({}, (tabs) => {
-                        console.log("fuck you");
                         tabs.forEach((tab) => {
                             chrome.tabs.sendMessage(tab.id, "bulk_put_success");
                         });
