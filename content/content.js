@@ -1,6 +1,8 @@
-var nextNounIndex = 0;
-var nextVerbIndex = 0;
-var nextAdjectiveIndex = 0;
+let nextNounIndex = 0;
+let nextVerbIndex = 0;
+let nextAdjectiveIndex = 0;
+
+let db = null;
 
 $( document ).ready(function() {
     console.log( "ready!" );
@@ -35,6 +37,11 @@ $( document ).ready(function() {
     $.get(chrome.extension.getURL('/content/wordsetDialog.html'), function(data) {
         $($.parseHTML(data)).appendTo('body');
     });
+
+    db = new Dexie("word2pos.db")
+    db.open().catch(function(error) {
+        console.error("could not open word2pos.db")
+    })
 });
 
 function loadWordList() {
@@ -148,4 +155,23 @@ function getNextReplacementWord(type, callback) {
         }
         callback(result);
     });
+}
+
+function getPartOfSpeechByWord(word) {
+    db.word2pos.where("word").equals(word).then(function(obj) {
+        switch(obj.pos) {
+            case "a":
+                return "adjective"
+            case "v":
+                return "verb"
+            case "n":
+                return "noun"
+            case "r":
+                return "adverb"
+            default:
+                return undefined
+        }
+    }).catch(function(e) {
+        return undefined
+    })
 }

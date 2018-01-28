@@ -3,7 +3,7 @@ chrome.runtime.onInstalled.addListener(function(details){
         // word2pos: word to part-of-speech
         let db = new Dexie("word2pos.db")
         db.version(2).stores({
-            word2pos: "&word,pos"
+            word2pos: "word,pos"
         })
         // read the wordnet dictionary file, parse it to JSON, and put JSON into db
         $.get(chrome.extension.getURL("dictionary/wn_dict.json"), function(data) {

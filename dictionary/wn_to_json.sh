@@ -13,7 +13,7 @@ do
     cat dictfiles/$file | cut -d " " -f 1-2
 done > intermediate_file_1
 
-echo "{" > "${filename}"
+echo "[" > "${filename}"
 while read line
 do
     if [ -z "$line" ]
@@ -33,12 +33,12 @@ do
 
     key="${key//_/ }"
 
-    echo "    \"$key\": \"$value\","
+    echo "    {\"word\":\"$key\", \"pos\":\"$value\"},"
 done >> "${filename}" < intermediate_file_1
-echo "}" >> "${filename}"
+echo "]" >> "${filename}"
 
 rm intermediate_file_1 # don't need this anymore
 
 len=$(cat "${1}" | wc -l)
 len=$(($len - 1))
-sed "${len}s/,//" -i "${filename}"
+sed -r "${len}s/,$//" -i "${filename}"
