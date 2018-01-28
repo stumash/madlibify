@@ -33,16 +33,29 @@ $( document ).ready(function() {
                 $wordset_dialog.removeClass("showing");
             });
         }
+        if (request === "bulk_put_success") {
+            console.log("bulk put success");
+        }
     });
 
     $.get(chrome.extension.getURL('/content/wordsetDialog.html'), function(data) {
         $($.parseHTML(data)).appendTo('body');
     });
 
-    db = new Dexie("word2pos.db")
-    db.open().catch(function(error) {
-        console.error("could not open word2pos.db")
-    })
+    // db = new Dexie("word2pos.db");
+    // db.open().catch(function(error) {
+    //     if(error){
+    //         console.error("could not open word2pos.db")
+    //     }
+    // });
+    //
+    setTimeout(function() {
+        // getPartOfSpeechByWord("monster");
+        console.log("should ask for reference to db");
+        chrome.runtime.sendMessage({operation: "getDB"}, function(response) {
+            console.log(response);
+        });
+    }, 1000);
 });
 
 function loadWordList() {
