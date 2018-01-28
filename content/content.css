@@ -23,7 +23,7 @@
 
     border: 2px solid #CCCCCC;
     border-radius: 5px;
-    background-color: white;
+    background-color: #008080;
 }
 
 #madlibify-wordset-dialog > .madlibify-list {
@@ -73,6 +73,17 @@
     width: 45.5%;
     text-align: center;
     cursor: pointer;
+	background-color: #51b8e1;
+	border-radius: 10px;
+}
+
+#madlibify-dialog-buttons button:hover {
+	background-color: #008080; /* teal */
+}
+
+#madlibify-dialog-buttons button:active {
+	background-color: #acc0c8; /* sky blue */
+	transform: translateY(4px);
 }
 
 #madlibify-save-wordlist {
@@ -85,6 +96,7 @@
 
 .column-header {
     text-align: center;
+	color: white;
 }
 
 .column-inputs {
