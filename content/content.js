@@ -32,6 +32,32 @@ function getWordFromSet(word) {
 	}
 }
 
+function getNextWord(type){
+	if(type === "noun"){
+		return "cat";
+	}
+    if(type === "verb"){
+        return "eat";
+    }
+    if(type === "adjective"){
+        return "funny";
+    }
+    return undefined;
+}
+
+function getPos(word){
+	if(word.charAt(0) === "n"){
+		return "noun";
+	}
+    if(word.charAt(0) === "v"){
+        return "verb";
+    }
+    if(word.charAt(0) === "a"){
+        return "adjective";
+    }
+    return undefined;
+}
+
 var wordCount = 0;
 var words;
 
@@ -63,11 +89,19 @@ var words;
                 console.log("newText", newText);
                 from += to;*/
 
+                var pos = getPos(current);
+
+                if(pos){
+                	newText += getNextWord(pos);
+				} else {
+                	newText += current;
+				}
+
                 // find replacement word
-                replacement = getWordFromSet(current);
+                // replacement = getWordFromSet(current);
 
                 // add replacement word to newText
-                newText += replacement;
+                // newText += replacement;
 
                 //newText += stepsBetweenArr[index+1];
 
