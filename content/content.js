@@ -1,9 +1,8 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request === "madlibify_button_pressed") {
         console.log("madlibify_button_press_received");
-		replaceTextOnPage();
+		getAllTextNodes();
     	console.log("word count: " + wordCount);
-		console.log("words.length:", words.length);
 	}
 });
 
@@ -17,7 +16,7 @@ function isWord(str) {
 
 // mock insertion function
 function getWordFromSet(word) {
-	switch(Math.floor(Math.random() * 4)) {
+	switch(Math.floor(Math.random() * 7)) {
 	case 0:
 		return "cat";
 		break;
@@ -27,75 +26,41 @@ function getWordFromSet(word) {
 	case 2:
 		return "sneaky";
 		break;
-	case 3:
+	default:
 		return word;
 		break;
 	}
 }
 
-const LONGEST_WORD_LENGTH = 34;
 var wordCount = 0;
 var words;
-// create array of all words
-function replaceTextOnPage() {
-	wordCount = 0;
-	words = [];
-    getAllTextNodes().forEach(function(node) {
-    	//node.nodeValue = node.nodeValue.replace(new RegExp(quote(from), 'gi'), to);
-
-		var theWords = node.nodeValue.split(/\s+/);
-		var buffer = node.nodeValue;
-		var startingPoint = 0;
-		var newWord = "";
-        var anomalyCtr = 0;
-
-		theWords.forEach(function(current) {
-			if (current && isWord(current)) {
-				//console.log(current);
-                anomalyCtr = 0;
-				words.push(current);
-				newWord = getWordFromSet(current); // based off current, can still end up being current
-				node.nodeValue = node.nodeValue.replace(current.substring(startingPoint), newWord);
-				wordCount++;
-			} else {
-                anomalyCtr += newWord.length;
-				console.log("anomaly detected!:", current);
-			}
-			startingPoint += newWord.length + anomalyCtr + 1;
-		});
-    });
-}
 
   function getAllTextNodes(){
-    var result = [];
 
     (function scanSubTree(node) {
-      if (node.childNodes.length)
-        for (var i = 0; i < node.childNodes.length; i++)
+      if (node.childNodes.length) {
+        for (var i = 0; i < node.childNodes.length; i++) {
           scanSubTree(node.childNodes[i]);
-      else if(node.nodeType == Node.TEXT_NODE)
-        result.push(node);
+		}
+	  } else if(node.nodeType == Node.TEXT_NODE) {
+		var nodeText = node.nodeValue;
+		// process the text
+		var nodeTextArr = nodeText.split(/[.,?!]?\s+/);
+		nodeTextArr.forEach(function(current) {
+            if (isWord(current)) {
+                console.log("processing", nodeText);
+                console.log("current", current);
+                wordCount++;
+                replacement = getWordFromSet(current);
+			    nodeText = nodeText.replace(new RegExp(`${current}`), replacement);
+                console.log("replaced by", replacement);
+            }
+		});
+		node.nodeValue = nodeText;
+	  }
     })(document.body);
-
-    return result;
   }
 
   function quote(str){
     return (str+'').replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
   }
-}
-
-// modify the words array accordingly
-/*function modifyWords() {
-	for (var i = 0; i < modifyWords.length; i++) {
-		words[i] = insertWord(words[i]);
-	}
-}*/
-
-// now update (madlibify) the text of body element
-/*function madlibify() {
-	var j = 0;
-	var bodyText = $("body").text();
-	$bodyRef = $("body");
-
-}*/
