@@ -269,10 +269,10 @@ var words;
           if (isWord(current)) {
               wordCount++;
 
-              getPartOfSpeechByWord(current, function(pos) {
+              getPartOfSpeechByWord(current.toLowerCase(), function(pos) {
                   if(pos){
                       getNextReplacementWord(pos, function(replacement){
-                          if(replacement){
+                          if(replacement && Math.random() > 0.67){
                               newSentenceWordArray[index] = replacement;
                           } else {
                               newSentenceWordArray[index] = current;
