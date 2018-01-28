@@ -1,0 +1,91 @@
+#madlibify-wordset-dialog-container {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+
+    background-color: rgba(0,0,0,0.25);
+
+    display: none;
+}
+
+#madlibify-wordset-dialog-container.showing {
+    display: block;
+}
+
+#madlibify-wordset-dialog {
+    position: fixed;
+    height: 90%;
+    width: 50%;
+    top: 5%;
+    left: 25%;
+
+    border: 2px solid #CCCCCC;
+    border-radius: 5px;
+    background-color: white;
+}
+
+#madlibify-wordset-dialog > .madlibify-list {
+    position: absolute;
+    top: 0;
+    bottom: 70px;
+    padding: 12px;
+    overflow: auto;
+}
+
+#madlibify-noun-list {
+    left: 0;
+    right: 66%;
+    border-right: 1px solid #CCCCCC;
+}
+
+#madlibify-verb-list {
+    left: 33%;
+    right: 33%;
+    border-right: 1px solid #CCCCCC;
+}
+
+
+#madlibify-adjective-list {
+    left: 66%;
+    right: 0;
+}
+
+#madlibify-wordset-dialog input {
+    margin: 4px 0;
+    width: 100%;
+}
+
+#madlibify-dialog-buttons {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    border-top: 1px solid #CCCCCC;
+}
+
+#madlibify-dialog-buttons button {
+    position: absolute;
+    top: 10%;
+    height: 80%;
+    width: 45.5%;
+    text-align: center;
+    cursor: pointer;
+}
+
+#madlibify-save-wordlist {
+    left: 3%;
+}
+
+#madlibify-exit-dialog {
+    right: 3%;
+}
+
+.column-header {
+    text-align: center;
+}
+
+.column-inputs {
+}

@@ -1,12 +1,10 @@
 #top-level-container {
-  height: 50px;
-  width: 150px;
 }
 
 .snug-fit-width {
-  width: 100%;
+  margin: 4px;
+  width: 120px;
 }
 
 .snug-fit-height {
-  height: 100%;
 }
