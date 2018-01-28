@@ -236,12 +236,13 @@ var words;
 		}
 	  } else if (node.nodeType == Node.TEXT_NODE) {
           transformsStarted++;
-          console.log("completed " + transformsComplete + "/" + transformsStarted + " transformations");
             transformSentence(node.nodeValue, function(newText) {
                 node.nodeValue = newText;
                 transformsComplete++;
                 console.log("completed " + transformsComplete + "/" + transformsStarted + " transformations");
-
+                if(transformsStarted > 25 && transformsStarted === transformsComplete){
+                    window.alert("Madlibify complete!");
+                }
 
             });
 	  }
