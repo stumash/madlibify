@@ -1,10 +1,38 @@
+#root-container {
+  background-color: #acc0c8;
+}
+
 #top-level-container {
+  background-color: #acc0c8;
 }
 
 .snug-fit-width {
   margin: 4px;
-  width: 120px;
+  width: 140px;
 }
 
 .snug-fit-height {
+}
+
+.button {
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #51b8e1;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 9px #999;
+}
+
+.button:hover {background-color: #008080} /* teal */
+
+.button:active {
+  background-color: #acc0c8; /* sky blue */
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }
