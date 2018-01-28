@@ -7,7 +7,7 @@ then
 fi
 filename="${1}"
 
-dictfiles=$(ls -l dictfiles | grep "." | awk '{print $9}') 
+dictfiles=$(ls -l dictfiles | grep "." | awk '{print $9}')
 for file in $dictfiles
 do
     cat dictfiles/$file | cut -d " " -f 1-2
@@ -24,6 +24,14 @@ do
     arr=(${line})
     key="${arr[0]}"
     value="${arr[1]}"
+
+    if [[ "${key}" =~ ^[\'.0-9].* ]] ||
+       [[ "${key}" =~ .*\..* ]]
+    then
+        continue
+    fi
+
+    key="${key//_/ }"
 
     echo "    \"$key\": \"$value\","
 done >> "${filename}" < intermediate_file_1
